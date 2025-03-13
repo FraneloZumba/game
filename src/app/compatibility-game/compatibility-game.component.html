@@ -1,0 +1,352 @@
+<div class="compatibility-container">
+  <!-- PANTALLA DE INICIO -->
+  <div *ngIf="gameState === 'start'" class="start-screen">
+    <div class="title-container">
+      <h1 class="main-title">💖 Medidor de Compatibilidad 💖</h1>
+      <div class="hearts-animation">
+        <span class="heart">❤️</span>
+        <span class="heart">💕</span>
+        <span class="heart">💘</span>
+        <span class="heart">💓</span>
+        <span class="heart">💗</span>
+      </div>
+      <p class="subtitle">¡Descubre la compatibilidad entre dos personas!</p>
+    </div>
+    <button (click)="startGame()" class="start-btn pulse-animation">
+      Comenzar Juego
+    </button>
+    <button *ngIf="compatibilityHistory.length > 0" (click)="showHistory()" class="history-btn">
+      Ver Historial
+    </button>
+  </div>
+
+  <!-- PANTALLA DE SELECCIÓN DE MODO -->
+  <div *ngIf="gameState === 'mode-select'" class="mode-select-screen">
+    <h2>¿Qué quieres medir hoy?</h2>
+    <div class="mode-buttons">
+      <button (click)="selectMode('couple')" class="mode-btn couple-btn">
+        <span class="mode-icon">💖</span>
+        <span class="mode-title">Compatibilidad Amorosa</span>
+        <span class="mode-desc">Para parejas o posibles parejas</span>
+      </button>
+      <button (click)="selectMode('friends')" class="mode-btn friends-btn">
+        <span class="mode-icon">🤝</span>
+        <span class="mode-title">Compatibilidad de Amistad</span>
+        <span class="mode-desc">Para amigos o posibles amigos</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- PANTALLA DE INGRESO DE NOMBRES -->
+  <div *ngIf="gameState === 'input-names'" class="names-screen">
+    <h2>{{ gameMode === 'couple' ? '¿Quiénes son los tortolitos? 💑' : '¿Quiénes son los amigos? 👯‍♂️' }}</h2>
+    <div class="input-section">
+      <div class="input-group">
+        <label for="name1">Primer nombre:</label>
+        <input 
+          type="text" 
+          id="name1" 
+          [(ngModel)]="person1.name" 
+          placeholder="Ingresa el primer nombre"
+        >
+      </div>
+      
+      <div class="input-group">
+        <label for="name2">Segundo nombre:</label>
+        <input 
+          type="text" 
+          id="name2" 
+          [(ngModel)]="person2.name" 
+          placeholder="Ingresa el segundo nombre"
+        >
+      </div>
+
+      <button 
+        (click)="proceedToDetails()" 
+        [disabled]="!person1.name.trim() || !person2.name.trim()"
+        class="next-btn"
+      >
+        Continuar
+      </button>
+    </div>
+  </div>
+
+  <!-- PANTALLA DE DETALLES -->
+  <div *ngIf="gameState === 'input-details'" class="details-screen">
+    <h2>Cuéntanos más sobre {{ person1.name }} y {{ person2.name }}</h2>
+    
+    <div class="profiles-container">
+      <!-- Perfil de la primera persona -->
+      <div class="profile-card">
+        <h3>{{ person1.name }}</h3>
+        
+        <div class="profile-input-group">
+          <label for="age1">Edad:</label>
+          <input type="number" id="age1" [(ngModel)]="person1.age" min="13" max="99">
+        </div>
+        
+        <div class="profile-input-group">
+          <label for="zodiac1">Signo Zodiacal:</label>
+          <select id="zodiac1" [(ngModel)]="person1.zodiacSign">
+            <option value="">Selecciona...</option>
+            <option *ngFor="let sign of zodiacSigns" [value]="sign">{{ sign }}</option>
+          </select>
+        </div>
+        
+        <div class="profile-input-group">
+          <label for="color1">Color favorito:</label>
+          <input type="text" id="color1" [(ngModel)]="person1.favoriteColor" placeholder="Ej: Azul">
+        </div>
+        
+        <div class="profile-input-group">
+          <label for="food1">Comida favorita:</label>
+          <select id="food1" [(ngModel)]="person1.favoriteFood">
+            <option value="">Selecciona...</option>
+            <option *ngFor="let food of foodTypes" [value]="food">{{ food }}</option>
+          </select>
+        </div>
+        
+        <div class="profile-input-group">
+          <label for="hobby1">Pasatiempo favorito:</label>
+          <input type="text" id="hobby1" [(ngModel)]="person1.hobby" placeholder="Ej: Videojuegos">
+        </div>
+        
+        <div class="profile-input-group">
+          <label for="music1">Género musical favorito:</label>
+          <select id="music1" [(ngModel)]="person1.musicGenre">
+            <option value="">Selecciona...</option>
+            <option *ngFor="let genre of musicGenres" [value]="genre">{{ genre }}</option>
+          </select>
+        </div>
+        
+        <div class="profile-input-group">
+          <label for="movie1">Género de películas favorito:</label>
+          <select id="movie1" [(ngModel)]="person1.movieGenre">
+            <option value="">Selecciona...</option>
+            <option *ngFor="let genre of movieGenres" [value]="genre">{{ genre }}</option>
+          </select>
+        </div>
+        
+        <div class="profile-input-group">
+          <label for="personality1">Personalidad:</label>
+          <select id="personality1" [(ngModel)]="person1.personality">
+            <option value="">Selecciona...</option>
+            <option *ngFor="let type of personalityTypes" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- Perfil de la segunda persona -->
+      <div class="profile-card">
+        <h3>{{ person2.name }}</h3>
+        
+        <div class="profile-input-group">
+          <label for="age2">Edad:</label>
+          <input type="number" id="age2" [(ngModel)]="person2.age" min="13" max="99">
+        </div>
+        
+        <div class="profile-input-group">
+          <label for="zodiac2">Signo Zodiacal:</label>
+          <select id="zodiac2" [(ngModel)]="person2.zodiacSign">
+            <option value="">Selecciona...</option>
+            <option *ngFor="let sign of zodiacSigns" [value]="sign">{{ sign }}</option>
+          </select>
+        </div>
+        
+        <div class="profile-input-group">
+          <label for="color2">Color favorito:</label>
+          <input type="text" id="color2" [(ngModel)]="person2.favoriteColor" placeholder="Ej: Rojo">
+        </div>
+        
+        <div class="profile-input-group">
+          <label for="food2">Comida favorita:</label>
+          <select id="food2" [(ngModel)]="person2.favoriteFood">
+            <option value="">Selecciona...</option>
+            <option *ngFor="let food of foodTypes" [value]="food">{{ food }}</option>
+          </select>
+        </div>
+        
+        <div class="profile-input-group">
+          <label for="hobby2">Pasatiempo favorito:</label>
+          <input type="text" id="hobby2" [(ngModel)]="person2.hobby" placeholder="Ej: Leer">
+        </div>
+        
+        <div class="profile-input-group">
+          <label for="music2">Género musical favorito:</label>
+          <select id="music2" [(ngModel)]="person2.musicGenre">
+            <option value="">Selecciona...</option>
+            <option *ngFor="let genre of musicGenres" [value]="genre">{{ genre }}</option>
+          </select>
+        </div>
+        
+        <div class="profile-input-group">
+          <label for="movie2">Género de películas favorito:</label>
+          <select id="movie2" [(ngModel)]="person2.movieGenre">
+            <option value="">Selecciona...</option>
+            <option *ngFor="let genre of movieGenres" [value]="genre">{{ genre }}</option>
+          </select>
+        </div>
+        
+        <div class="profile-input-group">
+          <label for="personality2">Personalidad:</label>
+          <select id="personality2" [(ngModel)]="person2.personality">
+            <option value="">Selecciona...</option>
+            <option *ngFor="let type of personalityTypes" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <button 
+      (click)="calculateCompatibility()" 
+      class="calculate-btn"
+    >
+      Calcular Compatibilidad
+    </button>
+  </div>
+
+  <!-- PANTALLA DE CARGA -->
+  <div *ngIf="gameState === 'loading'" class="loading-screen">
+    <h2>Analizando compatibilidad...</h2>
+    
+    <div class="loading-animation">
+      <!-- Nuevo corazón mejorado -->
+      <div class="heart-container">
+        <div class="heart-shape"></div>
+        <div class="heart-fill" [style.height.%]="loadingProgress"></div>
+      </div>
+      <div class="loading-text">{{ loadingProgress }}%</div>
+    </div>
+    
+    <div class="loading-messages">
+      <p *ngIf="loadingProgress < 20">Analizando personalidades...</p>
+      <p *ngIf="loadingProgress >= 20 && loadingProgress < 40">Comparando signos zodiacales...</p>
+      <p *ngIf="loadingProgress >= 40 && loadingProgress < 60">Evaluando gustos y preferencias...</p>
+      <p *ngIf="loadingProgress >= 60 && loadingProgress < 80">Calculando química entre ambos...</p>
+      <p *ngIf="loadingProgress >= 80">¡Casi listo! Preparando resultados...</p>
+    </div>
+  </div>
+
+  <!-- PANTALLA DE RESULTADOS -->
+  <div *ngIf="gameState === 'result'" class="result-screen">
+    <h2>Resultado</h2>
+    <div class="names-display">
+      <span>{{ person1.name }}</span>
+      <span class="heart">{{ gameMode === 'couple' ? '❤️' : '🤝' }}</span>
+      <span>{{ person2.name }}</span>
+    </div>
+    
+    <div class="percentage-container">
+      <div class="percentage-bar">
+        <div class="percentage-fill" [style.width.%]="compatibilityPercentage"></div>
+      </div>
+      <div class="percentage-value">{{ compatibilityPercentage }}%</div>
+    </div>
+    
+    <div class="compatibility-message">
+      <p>{{ getCompatibilityMessage() }}</p>
+    </div>
+    
+    <div class="compatibility-details" *ngIf="compatibilityPercentage !== null">
+      <h3>Detalles de la compatibilidad:</h3>
+      <ul>
+        <li *ngIf="person1.zodiacSign && person2.zodiacSign">
+          {{ person1.zodiacSign === person2.zodiacSign ? '✅' : '⚠️' }} 
+          {{ person1.name }} es {{ person1.zodiacSign }} y {{ person2.name }} es {{ person2.zodiacSign }}
+        </li>
+        <li *ngIf="person1.musicGenre === person2.musicGenre && person1.musicGenre">
+          ✅ A ambos les gusta la música {{ person1.musicGenre }}
+        </li>
+        <li *ngIf="person1.movieGenre === person2.movieGenre && person1.movieGenre">
+          ✅ Ambos disfrutan de películas de {{ person1.movieGenre }}
+        </li>
+        <li *ngIf="person1.favoriteFood === person2.favoriteFood && person1.favoriteFood">
+          ✅ ¡Comparten el mismo gusto por {{ person1.favoriteFood }}!
+        </li>
+        <li *ngIf="person1.hobby.toLowerCase() === person2.hobby.toLowerCase() && person1.hobby">
+          ✅ ¡Comparten el mismo pasatiempo: {{ person1.hobby }}!
+        </li>
+        <li *ngIf="person1.favoriteColor.toLowerCase() === person2.favoriteColor.toLowerCase() && person1.favoriteColor">
+          ✅ A ambos les gusta el color {{ person1.favoriteColor }}
+        </li>
+        <li *ngIf="math.abs(person1.age - person2.age) <= 2">
+          ✅ Tienen edades muy similares
+        </li>
+        <li *ngIf="math.abs(person1.age - person2.age) > 5">
+          ⚠️ Hay una diferencia de edad considerable
+        </li>
+        <li *ngIf="gameMode === 'couple' && person1.personality !== person2.personality">
+          <ng-container *ngFor="let pair of [['Introvertido/a', 'Extrovertido/a'], ['Creativo/a', 'Analítico/a'], ['Aventurero/a', 'Tranquilo/a'], ['Soñador/a', 'Práctico/a'], ['Empático/a', 'Racional'], ['Optimista', 'Pesimista'], ['Perfeccionista', 'Relajado/a'], ['Competitivo/a', 'Cooperativo/a']]">
+            <ng-container *ngIf="(person1.personality === pair[0] && person2.personality === pair[1]) || (person1.personality === pair[1] && person2.personality === pair[0])">
+              ✅ Sus personalidades {{ person1.personality }} y {{ person2.personality }} se complementan perfectamente
+            </ng-container>
+          </ng-container>
+        </li>
+        <li *ngIf="gameMode === 'friends' && person1.personality === person2.personality && person1.personality">
+          ✅ ¡Ambos tienen personalidad {{ person1.personality }}! ¡Gran sintonía!
+        </li>
+      </ul>
+    </div>
+    
+    <div class="result-buttons">
+      <button (click)="resetGame()" class="reset-btn">Intentar con otras personas</button>
+      <button (click)="showHistory()" class="history-btn">Ver Historial</button>
+    </div>
+  </div>
+
+  <!-- PANTALLA DE HISTORIAL -->
+  <div *ngIf="gameState === 'history'" class="history-screen">
+    <h2>Historial de Compatibilidad</h2>
+    
+    <div class="history-list">
+      <div *ngIf="compatibilityHistory.length === 0" class="no-history">
+        <p>Aún no hay registros en el historial.</p>
+      </div>
+      
+      <div *ngFor="let record of compatibilityHistory" class="history-item">
+        <div class="history-header">
+          <div class="history-names">
+            <span>{{ record.person1.name }}</span>
+            <span class="heart">{{ record.mode === 'couple' ? '❤️' : '🤝' }}</span>
+            <span>{{ record.person2.name }}</span>
+          </div>
+          <div class="history-percentage" [ngClass]="{
+            'high': record.percentage >= 70,
+            'medium': record.percentage >= 40 && record.percentage < 70,
+            'low': record.percentage < 40
+          }">
+            {{ record.percentage }}%
+          </div>
+        </div>
+        
+        <div class="history-details">
+          <p class="history-message">{{ record.message }}</p>
+          <p class="history-date">{{ formatDate(record.date) }}</p>
+          
+          <div class="history-profiles">
+            <div class="history-profile">
+              <h4>{{ record.person1.name }}</h4>
+              <ul>
+                <li *ngIf="record.person1.age">Edad: {{ record.person1.age }}</li>
+                <li *ngIf="record.person1.zodiacSign">Signo: {{ record.person1.zodiacSign }}</li>
+                <li *ngIf="record.person1.personality">Personalidad: {{ record.person1.personality }}</li>
+              </ul>
+            </div>
+            
+            <div class="history-profile">
+              <h4>{{ record.person2.name }}</h4>
+              <ul>
+                <li *ngIf="record.person2.age">Edad: {{ record.person2.age }}</li>
+                <li *ngIf="record.person2.zodiacSign">Signo: {{ record.person2.zodiacSign }}</li>
+                <li *ngIf="record.person2.personality">Personalidad: {{ record.person2.personality }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <button (click)="resetGame()" class="back-btn">Volver al Inicio</button>
+  </div>
+</div>
+
