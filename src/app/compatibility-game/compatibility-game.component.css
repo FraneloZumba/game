@@ -1,3 +1,5 @@
+/* compatibility-game.component.css */
+
 .compatibility-container {
   max-width: 800px;
   margin: 0 auto;
@@ -11,6 +13,7 @@
   flex-direction: column;
   color: #e0e0e0;
   transition: all 0.3s ease;
+  width: 100%;
 }
 
 /* ESTILOS PARA LA PANTALLA DE INICIO */
@@ -370,75 +373,72 @@
   z-index: 1;
 }
 
-.heart-fill:before,
-.heart-fill:after {
-  content: "";
-  position: absolute;
-  width: 100%;
+.heart-shape:hover .heart-fill {
   height: 100%;
-  background-color: #00e5ff;
-  border-radius: 50%;
-  box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
 }
 
-.heart-fill:before {
-  top: -50%;
-  left: 0;
-}
-
-.heart-fill:after {
-  top: 0;
-  left: -50%;
-}
-
-.loading-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #00e5ff;
-  text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
-  transition: all 0.3s ease;
-  z-index: 2;
-}
-
-.loading-messages {
-  margin-top: 30px;
-  min-height: 50px;
-  transition: all 0.3s ease;
-}
-
-.loading-messages p {
-  font-size: 1.2rem;
-  color: #b0b0b0;
-  animation: fadeIn 0.5s;
-  transition: all 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+@media (max-width: 768px) {
+  .compatibility-container {
+    padding: 15px;
+    width: 95%;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .main-title {
+    font-size: 2.5rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .start-btn {
+    padding: 12px 25px;
+    font-size: 1rem;
+  }
+
+  .next-btn,
+  .calculate-btn,
+  .reset-btn {
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .input-group input {
+    font-size: 0.9rem;
+  }
+
+  .profile-card {
+    width: 280px;
   }
 }
 
-/* ESTILOS PARA LA PANTALLA DE RESULTADOS */
-.result-screen {
-  text-align: center;
-  padding: 20px 0;
-  animation: fadeIn 0.5s ease;
-}
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 2rem;
+  }
 
-.result-screen h2 {
-  color: #00e5ff;
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
-  transition: all 0.3s ease;
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .start-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+
+  .next-btn,
+  .calculate-btn,
+  .reset-btn {
+    padding: 10px;
+    font-size: 1rem;
+  }
+
+  .input-group input {
+    font-size: 0.85rem;
+  }
+
+  .profile-card {
+    width: 100%;
+    margin-bottom: 15px;
+  }
 }
